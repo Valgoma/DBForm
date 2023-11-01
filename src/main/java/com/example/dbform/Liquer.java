@@ -129,7 +129,7 @@ public class Liquer {
     }
 
     public Liquer(int id, String label, float volume, AlcoCategory category, String subcategory, String country, float strength, float sugar, int year, int age) {
-       this.id = id;
+      this.id = id;
         this.label = new SimpleStringProperty(label);
         this.volume = new SimpleFloatProperty(volume);
         this.category = category;

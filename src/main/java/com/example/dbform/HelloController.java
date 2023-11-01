@@ -12,7 +12,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 public class HelloController {
@@ -47,10 +50,25 @@ public class HelloController {
     @FXML
     TableView<Liquer> table;
 
+    @FXML
+    void onKeyPressed(KeyEvent event)
+    {
+        if (event.getCode().toString().equals("DELETE"))
+        {
+            int i = table.getSelectionModel().getSelectedItem().getId();
+            try {
+                LiquerProcess.delLiq(i);}
+            catch (SQLException ex)
+            {
+                System.out.println(ex);
+            }
+            alcohol.remove(table.getSelectionModel().getSelectedItem());
+        }
+    }
     ObservableList<Liquer> alcohol = FXCollections.observableArrayList();
 
     public void initialize() {
-        int id = 2;
+        table.setItems(alcohol);
         TableColumn<Liquer, String> col1 = new TableColumn<>("label");
         col1.setCellValueFactory(new PropertyValueFactory<>("label"));
         table.getColumns().add(col1);
@@ -86,7 +104,7 @@ public class HelloController {
     @FXML
     void saveToDB(ActionEvent event) {
         try {
-            int id=2;
+          int id=2;
             String l = String.valueOf(label.getText());
             Float v = Float.parseFloat(volume.getText());
             AlcoCategory c = AlcoCategory.valueOf(category.getText());
@@ -101,7 +119,7 @@ public class HelloController {
             LiquerProcess.saveLiq(t);
 
         } catch (Exception e) {
-            System.out.println("ошибка записи " + e.getMessage());
+            System.out.println("ошибка записи " + e.getMessage()+ "..." + Arrays.toString(e.getStackTrace()));
         }
     }
 
